@@ -1,0 +1,12 @@
+.pop-up{
+    display: none;
+    position: fixed;
+    top: 0;
+    max-width: 1280px;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,.5);
+    flex-flow: column;
+}

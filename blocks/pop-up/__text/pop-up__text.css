@@ -1,0 +1,21 @@
+.pop-up__text{
+    font-size: 14px;
+    line-height: 24px;
+    margin-bottom: 30px;
+    border: 0;
+    border-bottom: 1px solid #000;
+}
+
+.pop-up__text:last-child{
+    margin-bottom: 48px;
+}
+
+@media screen and (max-width: 425px) {
+    .pop-up__text{
+        line-height: 17px;
+    }
+
+    .pop-up__text:last-child{
+        margin-bottom: 45px;
+    }
+}
