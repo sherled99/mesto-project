@@ -1,4 +1,4 @@
-.pop-up__input{
+.pop-up__form{
     display: flex;
     flex-flow: column;
     max-width: 358px;
@@ -10,7 +10,7 @@
 }
 
 @media screen and (max-width: 500px) {
-    .pop-up__input{
+    .pop-up__form{
         width: 238px;
         padding-top: 75px;
     }

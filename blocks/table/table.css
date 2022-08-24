@@ -8,3 +8,9 @@
     column-gap: 17px;
     padding-bottom: 67px;
 }
+
+@media screen and (max-width: 425px) {
+    .table{
+        padding-bottom: 52px;
+    }
+}

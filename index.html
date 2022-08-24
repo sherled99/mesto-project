@@ -11,74 +11,76 @@
     </head>
     <body class="page">
         <header class="header">
-            <img class="header__logo" src="images/Logo.svg">
+            <img class="header__logo" src="images/Logo.svg" alt="Логотип">
         </header>
         <main>
             <section class="profile">
                 <img class="profile__avatar" src="images/avatar.jpg" alt="Аватар">
                 <div class="profile__info">
-                    <p class="profile__name">Жак-Ив Кусто</p>
-                    <button class="profile__button-edit"></button>
+                    <h1 class="profile__name">Жак-Ив Кусто</h1>
+                    <button class="profile__button-edit" type="button"></button>
                     <p class="profile__status">Исследователь океана</p>
                 </div>
-                <button class="profile__button-add"></button>
-            </section>
-            <section class="pop-up">
-                <button class="pop-up__button-close"></button>
-                <div class="pop-up__container">
-                    <h2 class="pop-up__title">Редактировать профиль</h2>
-                    <fieldset class='pop-up__input'>
-                        <input class='pop-up__text' type='text' value="Жак-Ив Кусто">
-                        <input class='pop-up__text' type='text' value="Исследователь океана">
-                        <input class='pop-up__button-save' type='submit' value="Сохранить">
-                    </fieldset>
-                </div>
+                <button class="profile__button-add" type="button"></button>
             </section>
             <section class="table">
                 <div class="table__card">
                     <img class="table__photo" src="images/karachaevsk.png" alt="Карачаевск">
                     <div class="table__description">
-                        <p class="table__name">Карачаевск</p>
-                        <button class="table__button-like"></button>
+                        <h2 class="table__name">Карачаевск</h2>
+                        <button class="table__button-like" type="button"></button>
                     </div>
                 </div>
                 <div class="table__card">
                     <img class="table__photo" src="images/elbrus.png" alt="Гора Эльбрус">
                     <div class="table__description">
-                        <p class="table__name">Гора Эльбрус</p>
-                        <button class="table__button-like"></button>
+                        <h2 class="table__name">Гора Эльбрус</h2>
+                        <button class="table__button-like" type="button"></button>
                     </div>
                 </div>
                 <div class="table__card">
                     <img class="table__photo" src="images/dombay.png" alt="Домбай">
                     <div class="table__description">
-                        <p class="table__name">Домбай</p>
-                        <button class="table__button-like"></button>
+                        <h2 class="table__name">Домбай</h2>
+                        <button class="table__button-like" type="button"></button>
                     </div>
                 </div>
                 <div class="table__card">
                     <img class="table__photo" src="images/elbrus.png" alt="Гора Эльбрус">
                     <div class="table__description">
-                        <p class="table__name">Гора Эльбрус</p>
-                        <button class="table__button-like"></button>
+                        <h2 class="table__name">Гора Эльбрус</>
+                        <button class="table__button-like" type="button"></button>
                     </div>
                 </div>
                 <div class="table__card">
                     <img class="table__photo" src="images/dombay.png" alt="Домбай">
                     <div class="table__description">
-                        <p class="table__name">Домбай</p>
-                        <button class="table__button-like"></button>
+                        <h2 class="table__name">Домбай</h2>
+                        <button class="table__button-like" type="button"></button>
                     </div>
                 </div>
                 <div class="table__card">
                     <img class="table__photo" src="images/karachaevsk.png" alt="Карачаево-Черкесия">
                     <div class="table__description">
-                        <p class="table__name">Карачаево-Черкесия</p>
-                        <button class="table__button-like"></button>
+                        <h2 class="table__name">Карачаево-Черкесия</h2>
+                        <button class="table__button-like" type="button"></button>
                     </div>
                 </div>
             </section>
         </main>
+        <aside>
+            <section class="pop-up">
+                <button class="pop-up__button-close" type="button"></button>
+                <div class="pop-up__container">
+                    <h2 class="pop-up__title">Редактировать профиль</h2>
+                    <form class='pop-up__form' name="edit-form" action="" method="get">
+                        <input class='pop-up__text' type='text' name="name" value="Жак-Ив Кусто">
+                        <input class='pop-up__text' type='text' name="hobby" value="Исследователь океана">
+                        <button class='pop-up__button-save' type='submit'>Сохранить</button>
+                    </form>
+                </div>
+            </section>
+        </aside>
         <footer class="footer">
             <p class="footer__author">© 2022 Mesto Russia</p>
         </footer>
