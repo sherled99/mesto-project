@@ -17,66 +17,40 @@
             <section class="profile">
                 <img class="profile__avatar" src="images/avatar.jpg" alt="Аватар">
                 <div class="profile__info">
-                    <h1 class="profile__name">Жак-Ив Кусто</h1>
-                    <button class="profile__button-edit" type="button"></button>
+                    <div class="profile__container">
+                        <h1 class="profile__name">Жак-Ив Кусто</h1>
+                        <button class="profile__button-edit" id="profile__button-edit" type="button"></button>
+                    </div>
                     <p class="profile__status">Исследователь океана</p>
                 </div>
-                <button class="profile__button-add" type="button"></button>
+                <button class="profile__button-add" id="profile__button-add" type="button"></button>
             </section>
             <section class="table">
-                <div class="table__card">
-                    <img class="table__photo" src="images/karachaevsk.png" alt="Карачаевск">
-                    <div class="table__description">
-                        <h2 class="table__name">Карачаевск</h2>
-                        <button class="table__button-like" type="button"></button>
-                    </div>
-                </div>
-                <div class="table__card">
-                    <img class="table__photo" src="images/elbrus.png" alt="Гора Эльбрус">
-                    <div class="table__description">
-                        <h2 class="table__name">Гора Эльбрус</h2>
-                        <button class="table__button-like" type="button"></button>
-                    </div>
-                </div>
-                <div class="table__card">
-                    <img class="table__photo" src="images/dombay.png" alt="Домбай">
-                    <div class="table__description">
-                        <h2 class="table__name">Домбай</h2>
-                        <button class="table__button-like" type="button"></button>
-                    </div>
-                </div>
-                <div class="table__card">
-                    <img class="table__photo" src="images/elbrus.png" alt="Гора Эльбрус">
-                    <div class="table__description">
-                        <h2 class="table__name">Гора Эльбрус</h2>
-                        <button class="table__button-like" type="button"></button>
-                    </div>
-                </div>
-                <div class="table__card">
-                    <img class="table__photo" src="images/dombay.png" alt="Домбай">
-                    <div class="table__description">
-                        <h2 class="table__name">Домбай</h2>
-                        <button class="table__button-like" type="button"></button>
-                    </div>
-                </div>
-                <div class="table__card">
-                    <img class="table__photo" src="images/karachaevsk.png" alt="Карачаево-Черкесия">
-                    <div class="table__description">
-                        <h2 class="table__name">Карачаево-Черкесия</h2>
-                        <button class="table__button-like" type="button"></button>
-                    </div>
-                </div>
+                
             </section>
         </main>
         <aside>
-            <section class="pop-up">
-                <button class="pop-up__button-close" type="button"></button>
+            <section class="pop-up" id="pop-up-edit-profile">
+                <button class="pop-up__button-close" type="button" id="pop-up-edit-profile-close"></button>
                 <div class="pop-up__container">
                     <h2 class="pop-up__title">Редактировать профиль</h2>
                     <form class='pop-up__form' name="edit-form">
-                        <input class='pop-up__text' type='text' name="name" value="Жак-Ив Кусто">
-                        <input class='pop-up__text' type='text' name="hobby" value="Исследователь океана">
+                        <input class='pop-up__text' type='text' name="name" id ="name" >
+                        <input class='pop-up__text' type='text' name="hobby" id="hobby">
                         <button class='pop-up__button-save' type='submit'>Сохранить</button>
+                    </form>
+                </div>
+            </section>
+        </aside>
+        <aside>
+            <section class="pop-up" id="pop-up-edit-picture">
+                <button class="pop-up__button-close" id="pop-up-edit-picture-close" type="button"></button>
+                <div class="pop-up__container">
+                    <h2 class="pop-up__title">Новое место</h2>
+                    <form class='pop-up__form' name="edit-form-picture" id="edit-form-picture">
+                        <input class='pop-up__text' placeholder="Название" type='text' name="picture" id ="picture">
+                        <input class='pop-up__text' placeholder="Ссылка на картинку" type='text' name="url" id="url">
+                        <button class='pop-up__button-save' type='submit'>Создать</button>
                     </form>
                 </div>
             </section>
@@ -84,5 +58,25 @@
         <footer class="footer">
             <p class="footer__author">© 2022 Mesto Russia</p>
         </footer>
+        <template id="template-card">
+            <div class="table__card">
+                <button class="table__button-remove" type="button"></button>
+                <img class="table__photo">
+                <div class="table__description">
+                    <h2 class="table__name"></h2>
+                    <button class="table__button-like" type="button"></button>
+                </div>
+            </div>
+        </template>
+        <template id="template-picture">
+            <section class='picture'>
+                <figure class="picture__container">
+                    <button class="picture__button-close" id="picture__button-close" type="button"></button>
+                    <img class="picture__image">
+                    <figcaption class="picture__description"></figcaption>
+                </figure>
+            </section>
+        </template>
+        <script src="/scripts/script.js"></script>
     </body>
 </html>

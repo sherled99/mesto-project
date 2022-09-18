@@ -1,5 +1,6 @@
 .table__photo{
-    min-height: 282px;
+    height: 282px;
+    width: 282px;
     object-fit:cover;
     border-radius: 5% 5% 0 0;
 }
