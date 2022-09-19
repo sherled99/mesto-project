@@ -35,8 +35,8 @@
                 <div class="pop-up__container">
                     <h2 class="pop-up__title">Редактировать профиль</h2>
                     <form class='pop-up__form' name="edit-form">
-                        <input class='pop-up__text' type='text' name="name" id ="name" >
-                        <input class='pop-up__text' type='text' name="hobby" id="hobby">
+                        <input class='pop-up__text' type='text' id ="name" >
+                        <input class='pop-up__text' type='text' id="description">
                         <button class='pop-up__button-save' type='submit'>Сохранить</button>
                     </form>
                 </div>
@@ -48,8 +48,8 @@
                 <div class="pop-up__container">
                     <h2 class="pop-up__title">Новое место</h2>
                     <form class='pop-up__form' name="edit-form-picture" id="edit-form-picture">
-                        <input class='pop-up__text' placeholder="Название" type='text' name="picture" id ="picture">
-                        <input class='pop-up__text' placeholder="Ссылка на картинку" type='text' name="url" id="url">
+                        <input class='pop-up__text' placeholder="Название" type='text' id ="name">
+                        <input class='pop-up__text' placeholder="Ссылка на картинку" type='url' id="description">
                         <button class='pop-up__button-save' type='submit'>Создать</button>
                     </form>
                 </div>
@@ -58,8 +58,8 @@
         <aside class='picture'>
             <figure class="picture__container">
                 <button class="picture__button-close" id="picture__button-close" type="button"></button>
-                <img class="picture__image" src=null alt="">
-                <figcaption class="picture__description"></figcaption>
+                <img class="picture__image" id="name" src='' alt="">
+                <figcaption class="picture__description" id="description"></figcaption>
             </figure>
         </aside>
         <footer class="footer">
