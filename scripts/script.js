@@ -16,6 +16,10 @@ const editFormPicture = document.querySelector('#edit-form-picture');
 
 const closePopupEditButton = document.querySelector('#pop-up-edit-picture-close');
 
+const picture = document.querySelector('.picture');
+const closePictureButton = picture.querySelector('#picture__button-close');
+
+
 const initialCards = [
     {
       name: 'Архыз',
@@ -46,14 +50,16 @@ const initialCards = [
 function closePopup(evt){
   const targetId = evt.target.id;
   if (targetId === 'pop-up-edit-profile-close'){
-    popupEditProfile.classList.remove('pop-up_opened');
+    popupEditProfile.classList.toggle('pop-up_opened');
   } 
   else if (targetId === 'pop-up-edit-picture-close'){
-    popupEditPicture.classList.remove('pop-up_opened');
+    popupEditPicture.classList.toggle('pop-up_opened');
   }
   else if (targetId === 'picture__button-close'){
     const picture = document.querySelector('.picture');
-    picture.remove();
+    picture.classList.toggle('picture_opened');
+    picture.querySelector('.picture__image').src = null;
+    picture.querySelector('.picture__description').textContent = null;
   }
 };
 
@@ -74,6 +80,11 @@ function openPopup(evt){
     popupEditPicture.classList.toggle('pop-up_opened');
     clearAddPicture();
   }
+  else if (targetId === 'table__photo'){
+    picture.classList.toggle('picture_opened');
+    picture.querySelector('.picture__image').src = evt.target.src;
+    picture.querySelector('.picture__description').textContent = evt.target.alt;
+  }
   
 };
 
@@ -92,22 +103,6 @@ function removeCard(evt){
   evt.target.parentElement.remove();
 }
 
-function openPicture(evt){
-  const page = document.querySelector('.page');
-  const template = document.querySelector('#template-picture').content;
-  const picture = template.querySelector('.picture').cloneNode(true);
-  picture.querySelector('.picture__image').src = evt.target.src;
-  picture.querySelector('.picture__description').textContent = evt.target.alt;
-
-  const closeButton = picture.querySelector('#picture__button-close');
-  closeButton.addEventListener('click', closePopup);
-
-  picture.classList.add('picture_opened');
-
-  page.append(picture);
-
-}
-
 function addCard(name, link, before){
   const table = document.querySelector('.table');
   const template = document.querySelector('#template-card').content;
@@ -122,7 +117,7 @@ function addCard(name, link, before){
   const removeButton = card.querySelector('.table__button-remove');
   removeButton.addEventListener('click', removeCard);
 
-  card.querySelector('.table__photo').addEventListener('click', openPicture);
+  card.querySelector('.table__photo').addEventListener('click', openPopup);
 
   before ? table.append(card) : table.prepend(card);
 }
@@ -143,6 +138,7 @@ function savePicture(evt){
 
 closePopupButton.addEventListener('click', closePopup);
 closePopupEditButton.addEventListener('click', closePopup);
+closePictureButton.addEventListener('click', closePopup);
 nameEditButton.addEventListener('click', openPopup);
 addPictureButon.addEventListener('click', openPopup);
 popupEditForm.addEventListener('submit', formSubmitHandler);

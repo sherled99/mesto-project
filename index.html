@@ -55,27 +55,25 @@
                 </div>
             </section>
         </aside>
+        <aside class='picture'>
+            <figure class="picture__container">
+                <button class="picture__button-close" id="picture__button-close" type="button"></button>
+                <img class="picture__image">
+                <figcaption class="picture__description"></figcaption>
+            </figure>
+        </aside>
         <footer class="footer">
             <p class="footer__author">© 2022 Mesto Russia</p>
         </footer>
         <template id="template-card">
             <div class="table__card">
                 <button class="table__button-remove" type="button"></button>
-                <img class="table__photo">
+                <img class="table__photo" id="table__photo">
                 <div class="table__description">
                     <h2 class="table__name"></h2>
                     <button class="table__button-like" type="button"></button>
                 </div>
             </div>
-        </template>
-        <template id="template-picture">
-            <section class='picture'>
-                <figure class="picture__container">
-                    <button class="picture__button-close" id="picture__button-close" type="button"></button>
-                    <img class="picture__image">
-                    <figcaption class="picture__description"></figcaption>
-                </figure>
-            </section>
         </template>
         <script src="scripts/script.js"></script>
     </body>
