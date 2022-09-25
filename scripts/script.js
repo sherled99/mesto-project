@@ -22,13 +22,19 @@ const descPicEdit = popupEditPicture.querySelector('#description');
 const picName = picture.querySelector('#name');
 const descName = picture.querySelector('#description');
 const closeButtons = document.querySelectorAll('.popup__close');
+const editFormPictureName = editFormPicture.querySelector('#name');
+const editFormPictureDesc = editFormPicture.querySelector('#description');
 
 function closePopup (popup, evt){
   popup.classList.remove('pop-up_opened');
 }
 
-function openPopup (popup, name, desc, evt){
+function openPopup (popup, evt){
   popup.classList.add('pop-up_opened');
+  
+}
+
+function setDefaultValues(popup, name, desc, evt){
   if (popup.classList.contains('picture')) {
     picName.src = name;
     picName.alt = desc;
@@ -58,7 +64,7 @@ function setLike(evt){
 }
 
 function removeCard(evt){
-  evt.target.parentElement.remove();
+  evt.target.closest('.table__card').remove();
 }
 
 function addCard(name, link){
@@ -106,13 +112,14 @@ function createCard(name, link) {
   likeButton.addEventListener('click', setLike);
   const removeButton = cardElement.querySelector('.table__button-remove');
   removeButton.addEventListener('click', removeCard);
-  cardElement.querySelector('.table__photo').addEventListener('click', openPopup.bind(null,picture, link, name));
+  cardElement.querySelector('.table__photo').addEventListener('click', openPopup.bind(null, picture));
+  cardElement.querySelector('.table__photo').addEventListener('click', setDefaultValues.bind(null,picture, link, name));
   return cardElement
 }
 
 function savePicture(evt){
   evt.preventDefault();
-  addCard(editFormPicture.querySelector('#name').value, editFormPicture.querySelector('#description').value);
+  addCard(editFormPictureName.value, editFormPictureDesc.value);
   closePopup(popupEditPicture, null, null);
 }
 
@@ -124,8 +131,10 @@ function getName(){
 closePopupButton.addEventListener('click', closePopup.bind(null, popupEditProfile, null, null));
 closePopupEditButton.addEventListener('click', closePopup.bind(null, popupEditPicture, null, null));
 closePictureButton.addEventListener('click', closePopup.bind(null, picture, '', ''));
-nameEditButton.addEventListener('click', openPopup.bind(null, popupEditProfile, null, null));
-addPictureButon.addEventListener('click', openPopup.bind(null, popupEditPicture, null, null));
+nameEditButton.addEventListener('click', openPopup.bind(null, popupEditProfile));
+nameEditButton.addEventListener('click', setDefaultValues.bind(null, popupEditProfile, null, null));
+addPictureButon.addEventListener('click', openPopup.bind(null, popupEditPicture));
+addPictureButon.addEventListener('click', setDefaultValues.bind(null, popupEditPicture, null, null));
 popupEditForm.addEventListener('submit', saveProfile);
 editFormPicture.addEventListener('submit', savePicture);
 setStandartCards();
