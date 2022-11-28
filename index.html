@@ -34,10 +34,14 @@
                 <button class="popup__close pop-up__button-close" type="button" id="pop-up-edit-profile-close"></button>
                 <div class="pop-up__container">
                     <h2 class="pop-up__title">Редактировать профиль</h2>
-                    <form class='pop-up__form' name="edit-form">
-                        <input class='pop-up__text' type='text' id ="name" >
-                        <input class='pop-up__text' type='text' id="description">
-                        <button class='pop-up__button-save' type='submit'>Сохранить</button>
+                    <form class='pop-up__form' name="edit-form" novalidate>
+                        <fieldset class="pop-up__set">
+                            <input class='pop-up__text' type='text' id="name" minlength="2" maxlength="40" pattern="^[А-яA-Za-z,\-\s]+$" data-error-message="Разрешены только латинские буквы, кириллические буквы, знаки дефиса и пробелы" required>
+                            <span class="pop-up__text-error pop-up__text-name-error"></span>
+                            <input class='pop-up__text' type='text' id="description" minlength="2" maxlength="200" pattern="^[А-яA-Za-z,\-\s]+$" data-error-message="Разрешены только латинские буквы, кириллические буквы, знаки дефиса и пробелы" required>
+                            <span class="pop-up__text-error pop-up__text-description-error"></span>
+                            <button class='pop-up__button-save' type='submit'>Сохранить</button>
+                        </fieldset>
                     </form>
                 </div>
             </section>
@@ -47,10 +51,14 @@
                 <button class="popup__close pop-up__button-close" id="pop-up-edit-picture-close" type="button"></button>
                 <div class="pop-up__container">
                     <h2 class="pop-up__title">Новое место</h2>
-                    <form class='pop-up__form' name="edit-form-picture" id="edit-form-picture">
-                        <input class='pop-up__text' placeholder="Название" type='text' id ="name">
-                        <input class='pop-up__text' placeholder="Ссылка на картинку" type='url' id="description">
-                        <button class='pop-up__button-save' type='submit'>Создать</button>
+                    <form class='pop-up__form' name="edit-form-picture" id="edit-form-picture" novalidate>
+                        <fieldset class="pop-up__set">
+                            <input class='pop-up__text' placeholder="Название" type='text' id ="name" minlength="2" maxlength="30" pattern="^[А-яA-Za-z,\-\s]+$" data-error-message="Разрешены только латинские буквы, кириллические буквы, знаки дефиса и пробелы" required>
+                            <span class="pop-up__text-error pop-up__text-name-error"></span>
+                            <input class='pop-up__text' placeholder="Ссылка на картинку" type='url' id="description" required>
+                            <span class="pop-up__text-error pop-up__text-description-error"></span>
+                            <button class='pop-up__button-save' type='submit' disabled >Создать</button>
+                        </fieldset>
                     </form>
                 </div>
             </section>
@@ -75,6 +83,7 @@
                 </div>
             </div>
         </template>
-        <script src="scripts/script.js"></script>
+        <script type="module" src="scripts/script.js"></script>
+        <script type="module" src="scripts/components/modal.js"></script>
     </body>
 </html>
