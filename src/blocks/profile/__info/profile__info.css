@@ -5,6 +5,7 @@
     padding-left: 30px;
     align-self: center;
     margin-right: auto;
+    flex-flow: column;
 }
 
 @media screen and (max-width:768px) {

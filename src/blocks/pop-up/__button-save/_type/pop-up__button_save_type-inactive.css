@@ -3,3 +3,8 @@
     background: #fff;
     color: grey;
 }
+
+.pop-up__button_save_type-inactive:hover{
+    opacity: 0.8;
+    cursor: default;
+}
