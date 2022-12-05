@@ -1,9 +1,9 @@
 import './pages/index.css';
-import {popupEditProfile, popupEditForm, nameForm, hobbyForm, nameInfo, hobbyInfo, popupEditPicture, pictureFormEdit, nameProfile,
+import {popupEditProfile, nameEditButton, popupEditForm, buttonAddPicture, nameForm, hobbyForm, nameInfo, hobbyInfo, popupEditPicture, pictureFormEdit, nameProfile,
     descProfile, namePicEdit, descPicEdit, picName, descName, pictureFormEditName, pictureFormEditDesc} from './scripts/components/const.js';
 import {enableValidation} from './scripts/components/validate.js'
 import {setStandartCards, addCard} from './scripts/components/card.js'
-import {closePopup} from './scripts/components/modal.js'
+import {closePopup, openPopup} from './scripts/components/modal.js'
 
 export function setDefaultValuesInEditPicture(){
   namePicEdit.value = "";
@@ -42,5 +42,14 @@ enableValidation({
   errorClass: 'pop-up__text-error'
 }); 
 
+
+nameEditButton.addEventListener('click', () => {
+  openPopup(popupEditProfile);
+  setDefaultValuesInProfile()
+});
+buttonAddPicture.addEventListener('click', () => {
+  openPopup(popupEditPicture);
+  setDefaultValuesInEditPicture()
+});
 popupEditForm.addEventListener('submit', saveProfile);
 pictureFormEdit.addEventListener('submit', savePicture);

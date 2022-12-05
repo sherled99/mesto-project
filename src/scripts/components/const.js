@@ -1,5 +1,4 @@
 export const popupEditProfile = document.querySelector('#pop-up-edit-profile');
-export const popupEditProfileIsClose = popupEditProfile.querySelector('#pop-up-edit-profile-close');
 export const nameEditButton = document.querySelector('.profile__button-edit');
 export const popupEditForm = popupEditProfile.querySelector('.pop-up__form');
 export const nameForm = popupEditForm.querySelector('#name');
@@ -12,9 +11,7 @@ export const template = document.querySelector('#template-card').content;
 export const popupEditPicture = document.querySelector('#pop-up-edit-picture');
 export const buttonAddPicture = document.querySelector('.profile__button-add');
 export const pictureFormEdit = document.querySelector('#edit-form-picture');
-export const closePopupEditButton = document.querySelector('#pop-up-edit-picture-close');
 export const picture = document.querySelector('.picture');
-export const closePictureButton = picture.querySelector('#picture__button-close');
 export const nameProfile = popupEditProfile.querySelector('#name');
 export const descProfile = popupEditProfile.querySelector('#description');
 export const namePicEdit = popupEditPicture.querySelector('#name');
