@@ -3,15 +3,14 @@
     flex-flow: column;
     max-width: 358px;
     width: 100%;
-    padding-top: 54px;
-    padding-bottom: 37px;
-    margin: 0 auto;
+    margin-bottom: 37px;
+    margin: 30px auto 0;
     border: 0;
 }
 
 @media screen and (max-width: 500px) {
     .pop-up__form{
         width: 238px;
-        padding-top: 65px;
+        margin-top: 20px;
     }
 }

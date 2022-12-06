@@ -19,7 +19,6 @@ function closePopupByEsc(evt){
 
 function closePopupByClick(evt){
   if(evt.target.classList.contains("pop-up") || evt.target.classList.contains('popup__close')){
-    const openedPopup = document.querySelector('.pop-up_opened');
-    closePopup(openedPopup);
+    closePopup(evt.currentTarget);
   }
 }
