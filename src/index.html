@@ -34,10 +34,14 @@
                 <div class="pop-up__container">
                     <h2 class="pop-up__title">Редактировать профиль</h2>
                     <form class='pop-up__form' name="edit-form" novalidate>
-                        <input class='pop-up__text' type='text' id="name" minlength="2" maxlength="40" pattern="^[А-яA-Za-z,\-\s]+$" data-error-message="Разрешены только латинские буквы, кириллические буквы, знаки дефиса и пробелы" required>
-                        <span class="pop-up__text-error pop-up__text-name-error"></span>
-                        <input class='pop-up__text' type='text' id="description" minlength="2" maxlength="200" pattern="^[А-яA-Za-z,\-\s]+$" data-error-message="Разрешены только латинские буквы, кириллические буквы, знаки дефиса и пробелы" required>
-                        <span class="pop-up__text-error pop-up__text-description-error"></span>
+                        <div class="pop-up__input-form">
+                            <input class='pop-up__text' type='text' id="name" minlength="2" maxlength="40" pattern="^[А-яA-Za-z,\-\s]+$" data-error-message="Разрешены только латинские буквы, кириллические буквы, знаки дефиса и пробелы" required>
+                            <span class="pop-up__text-error pop-up__text-name-error"></span>
+                        </div>
+                        <div class="pop-up__input-form">
+                            <input class='pop-up__text' type='text' id="description" minlength="2" maxlength="200" pattern="^[А-яA-Za-z,\-\s]+$" data-error-message="Разрешены только латинские буквы, кириллические буквы, знаки дефиса и пробелы" required>
+                            <span class="pop-up__text-error pop-up__text-description-error"></span>
+                        </div>
                         <button class='pop-up__button-save' type='submit'>Сохранить</button>
                     </form>
                 </div>
@@ -49,10 +53,14 @@
                 <div class="pop-up__container">
                     <h2 class="pop-up__title">Новое место</h2>
                     <form class='pop-up__form' name="edit-form-picture" id="edit-form-picture" novalidate>
-                        <input class='pop-up__text' placeholder="Название" type='text' id ="name" minlength="2" maxlength="30" pattern="^[А-яA-Za-z,\-\s]+$" data-error-message="Разрешены только латинские буквы, кириллические буквы, знаки дефиса и пробелы" required>
-                        <span class="pop-up__text-error pop-up__text-name-error"></span>
-                        <input class='pop-up__text' placeholder="Ссылка на картинку" type='url' id="description" required>
-                        <span class="pop-up__text-error pop-up__text-description-error"></span>
+                        <div class="pop-up__input-form">
+                            <input class='pop-up__text' placeholder="Название" type='text' id ="name" minlength="2" maxlength="30" pattern="^[А-яA-Za-z,\-\s]+$" data-error-message="Разрешены только латинские буквы, кириллические буквы, знаки дефиса и пробелы" required>
+                            <span class="pop-up__text-error pop-up__text-name-error"></span>
+                        </div>
+                        <div class="pop-up__input-form">
+                            <input class='pop-up__text' placeholder="Ссылка на картинку" type='url' id="description" required>
+                            <span class="pop-up__text-error pop-up__text-description-error"></span>
+                        </div>
                         <button class='pop-up__button-save' type='submit' disabled >Создать</button>
                     </form>
                 </div>

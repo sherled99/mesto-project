@@ -38,6 +38,7 @@ enableValidation({
   formSelector: '.pop-up__form',
   inputSelector: '.pop-up__text',
   submitButtonSelector: '.pop-up__button-save',
+  inputInvalid: 'pop-up__text_invalid',
   inactiveButtonClass: 'pop-up__button_save_type-inactive',
   errorClass: 'pop-up__text-error'
 }); 

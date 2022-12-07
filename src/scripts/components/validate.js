@@ -1,7 +1,7 @@
-const showInputError = (formElement, inputElement, errorMessage, errorClass) => {
+const showInputError = (formElement, inputElement, errorMessage, inputInvalid) => {
   const errorElement = formElement.querySelector(`.pop-up__text-${inputElement.id}-error`);
   if (!errorElement) return;
-  inputElement.classList.add(errorClass);
+  inputElement.classList.add(inputInvalid);
   if (inputElement.validity.patternMismatch) {
     errorMessage = inputElement.dataset.errorMessage
   }
@@ -9,17 +9,17 @@ const showInputError = (formElement, inputElement, errorMessage, errorClass) => 
   if (errorMessage) errorElement.textContent = errorMessage;
 };
 
-const hideInputError = (formElement, inputElement, errorClass) => {
+const hideInputError = (formElement, inputElement, inputInvalid) => {
   const errorElement = formElement.querySelector(`.pop-up__text-${inputElement.id}-error`);
-  inputElement.classList.remove(errorClass);
+  inputElement.classList.remove(inputInvalid);
   errorElement.textContent = '';
 };
 
-const checkInputValidity = (formElement, inputElement, errorClass) => {
+const checkInputValidity = (formElement, inputElement, inputInvalid) => {
   if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, inputElement.validationMessage, errorClass);
+    showInputError(formElement, inputElement, inputElement.validationMessage, inputInvalid);
   } else {
-    hideInputError(formElement, inputElement, errorClass);
+    hideInputError(formElement, inputElement, inputInvalid);
   }
 };
 
@@ -30,7 +30,7 @@ const setEventListeners = (formElement, settings) => {
   
   inputList.forEach((inputElement) => {
     inputElement.addEventListener('input', function () {
-      checkInputValidity(formElement, inputElement, settings.errorClass);
+      checkInputValidity(formElement, inputElement, settings.inputInvalid);
       toggleButtonState(inputList, buttonElement, settings.inactiveButtonClass);
     });
   });
