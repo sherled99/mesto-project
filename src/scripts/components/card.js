@@ -1,84 +1,85 @@
-import {table, template, picture, popupDeletePicture} from './const.js';
-import {openPopup, closePopup} from './modal.js';
-import {setDefaultValuesInCard, userId} from '../../index.js';
-import {removeCardInDb, updateLikeInDb, addCardInDb} from './api.js';
+import { cardList, template, picture, popupDeletePicture } from "./const.js";
+import { openPopup, closePopup } from "./modal.js";
+import { setDefaultValuesInCard, userId } from "../../pages/index.js";
+import { removeCard as removeCardInDb, updateLike as updateLikeInDb, addCard as addCardInDb } from "./api.js";
+import { renderDeleting } from "./utils.js";
 
-function openRemoveCard(evt){
+function openRemoveCard(evt) {
   openPopup(popupDeletePicture);
   popupDeletePicture.id = evt.target.parentElement.id;
   popupDeletePicture.card = evt.target.closest(".table__card");
-  popupDeletePicture.addEventListener('submit',removeCard);
+  popupDeletePicture.addEventListener("submit", removeCard);
 }
 
-function updateLike(method, like){
+function updateLike(method, like) {
   updateLikeInDb(method, like.id)
-  .then((res) => {
-    like.textContent = res.likes.length;
-  })
-  .catch((err) => console.log(err));
+    .then((res) => {
+      like.textContent = res.likes.length;
+    })
+    .catch((err) => console.log(err));
 }
 
-export function addCard(card){
+export function addCard(card) {
   return addCardInDb(card)
-  .then((res) =>
-    table.prepend(
-      createCard(
-        res.owner._id,
-        res._id,
-        res.name,
-        res.link,
-        res.likes,
-        res.likes.some((x) => x._id === res.owner._id)
+    .then((res) =>
+      cardList.prepend(
+        createCard(
+          res.owner._id,
+          res._id,
+          res.name,
+          res.link,
+          res.likes,
+          res.likes.some((x) => x._id === res.owner._id)
+        )
       )
     )
-  )
-  .catch((err) => console.log(err));
+    .catch((err) => console.log(err));
 }
 
-function removeCard(currentEvt){
+function removeCard(currentEvt) {
   currentEvt.preventDefault();
-  const btn = currentEvt.target.querySelector('.pop-up__button-save');
-  btn.textContent = "Удаление...";
+  const btn = currentEvt.target.querySelector(".pop-up__button-save");
+  renderDeleting(btn, true);
   return removeCardInDb(popupDeletePicture.id)
-  .then(()=> {
-    popupDeletePicture.card.remove();
-    closePopup(popupDeletePicture);
-    popupDeletePicture.removeEventListener('submit', removeCard);
-    btn.textContent = "Удалить";
-  })
-  .catch((err) => console.log(err));
+    .then(() => {
+      popupDeletePicture.card.remove();
+      closePopup(popupDeletePicture);
+      popupDeletePicture.removeEventListener("submit", removeCard);
+    })
+    .catch((err) => console.log(err))
+    .finally(() => renderDeleting(btn, false));
 }
 
-function setLike(evt){
-    const like = evt.target.parentElement.querySelector('.table__like');
-    if (!evt.target.classList.contains('table__button-like_active')){
-      updateLike("PUT", like);
-    }
-    else {
-      updateLike("DELETE", like);
-    }
-    evt.target.classList.toggle('table__button-like_active');
+function setLike(evt) {
+  const like = evt.target.parentElement.querySelector(".table__like");
+  if (!evt.target.classList.contains("table__button-like_active")) {
+    updateLike("PUT", like);
+  } else {
+    updateLike("DELETE", like);
+  }
+  evt.target.classList.toggle("table__button-like_active");
 }
 
 export function createCard(ownerId, id, name, link, likes, isLike) {
-  const cardElement = template.querySelector('.table__card').cloneNode(true);
+  const cardElement = template.querySelector(".table__card").cloneNode(true);
   cardElement.id = id;
-  const photo = cardElement.querySelector('.table__photo');
-  const like = cardElement.querySelector('.table__like');
+  const photo = cardElement.querySelector(".table__photo");
+  const like = cardElement.querySelector(".table__like");
   photo.src = link;
   photo.alt = name;
   like.textContent = likes.length;
   like.id = id;
-  cardElement.querySelector('.table__name').textContent = name;
-  const likeButton = cardElement.querySelector('.table__button-like');
-  if (isLike) likeButton.classList.add('table__button-like_active');
-  likeButton.addEventListener('click', setLike);
-  const btnDelete = cardElement.querySelector('.table__button-remove');
-  btnDelete.addEventListener('click', openRemoveCard);
-  if (userId === ownerId) btnDelete.classList.add('table__button-remove_active');
-  photo.addEventListener('click', () => {
+  cardElement.querySelector(".table__name").textContent = name;
+  const likeButton = cardElement.querySelector(".table__button-like");
+  if (isLike) likeButton.classList.add("table__button-like_active");
+  likeButton.addEventListener("click", setLike);
+  const btnDelete = cardElement.querySelector(".table__button-remove");
+  btnDelete.addEventListener("click", openRemoveCard);
+  if (userId === ownerId)
+    btnDelete.classList.add("table__button-remove_active");
+  photo.addEventListener("click", () => {
     openPopup(picture);
     setDefaultValuesInCard(link, name);
   });
-  return cardElement
+  return cardElement;
 }
