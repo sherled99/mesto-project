@@ -52,32 +52,43 @@ export function updateProfile(profile){
   
 function saveProfile (evt) {
   evt.preventDefault();
+  const btn = evt.target.querySelector('.pop-up__button-save');
+  btn.textContent = "Сохранение...";
   saveProfileInDb(nameForm.value, hobbyForm.value)
   .then((res) => {
     updateProfile(res);
     closePopup(popupEditProfile);
+    btn.textContent = "Сохранить";
   })
   .catch((err) => console.log(err));
 }
 
 function savePicture(evt){
   evt.preventDefault();
+  const btn = evt.target.querySelector('.pop-up__button-save');
+  btn.textContent = "Создание...";
   addCard({
     name: pictureFormEditName.value,
     link: pictureFormEditDesc.value
-  });
-  closePopup(popupEditPicture);
+  })
+  .then(() => {
+    closePopup(popupEditPicture);
+    btn.textContent = "Создать";
+  })
+  .catch((err) => console.log(err));;
 }
 
 function updateAvatar(evt){
   evt.preventDefault();
+  const btn = evt.target.querySelector('.pop-up__button-save');
+  btn.textContent = "Обновление...";
   updateAvatarInDb(avatarForm.querySelector('#url').value)
   .then((res) => {
     avatarInfo.src = res.avatar;
+    btn.textContent = "Сохранить";
+    closePopup(popupUpdateAvatar);
   })
   .catch((err) => console.log(err));
-
-  closePopup(popupUpdateAvatar);
 }
 
 enableValidation({
