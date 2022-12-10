@@ -1,0 +1,4 @@
+.table__button-container{
+    display: flex;
+    flex-flow: column;
+}
