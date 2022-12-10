@@ -25,7 +25,3 @@ export const picName = picture.querySelector('#name');
 export const descName = picture.querySelector('#description');
 export const pictureFormEditName = pictureFormEdit.querySelector('#name');
 export const pictureFormEditDesc = pictureFormEdit.querySelector('#description');
-export const connectHeaders = {
-    authorization: '95e1c598-7d7b-4945-aa63-eed177f7d6d7',
-    'Content-Type': 'application/json; charset=UTF-8'
-}
