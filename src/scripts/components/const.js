@@ -26,3 +26,11 @@ export const descName = picture.querySelector("#description");
 export const pictureFormEditName = pictureFormEdit.querySelector("#name");
 export const pictureFormEditDesc = pictureFormEdit.querySelector("#description");
 export const formUrl = avatarForm.querySelector('#url');
+export const validationConfig = {
+    formSelector: '.pop-up__form',
+    inputSelector: '.pop-up__text',
+    submitButtonSelector: '.pop-up__button-save',
+    inputInvalid: 'pop-up__text_invalid',
+    inactiveButtonClass: 'pop-up__button_save_type-inactive',
+    errorClass: 'pop-up__text-error'
+  }

@@ -1,6 +1,6 @@
 import './index.css';
 import {popupEditProfile, nameEditButton, popupEditForm, buttonAddPicture, nameForm, hobbyForm, nameInfo, hobbyInfo, avatarInfo, avatarForm, popupUpdateAvatar,popupEditPicture, pictureFormEdit, nameProfile,
-    descProfile, namePicEdit, descPicEdit, picName, descName, pictureFormEditName, pictureFormEditDesc, cardList, formUrl} from '../scripts/components/const.js';
+    descProfile, namePicEdit, descPicEdit, picName, descName, pictureFormEditName, pictureFormEditDesc, cardList, formUrl, validationConfig} from '../scripts/components/const.js';
 import {enableValidation} from '../scripts/components/validate.js'
 import {addCard} from '../scripts/components/card.js'
 import {closePopup, openPopup} from '../scripts/components/modal.js'
@@ -97,30 +97,23 @@ function updateAvatar(evt){
   .finally(() => renderLoading(btn, false));
 }
 
-enableValidation({
-  formSelector: '.pop-up__form',
-  inputSelector: '.pop-up__text',
-  submitButtonSelector: '.pop-up__button-save',
-  inputInvalid: 'pop-up__text_invalid',
-  inactiveButtonClass: 'pop-up__button_save_type-inactive',
-  errorClass: 'pop-up__text-error'
-});
+enableValidation(validationConfig);
 getProfile();
 
 
 nameEditButton.addEventListener('click', () => {
   setDefaultValuesInProfile();
-  clearInputError(popupEditForm, 'pop-up__text_invalid');
+  clearInputError(popupEditForm);
   openPopup(popupEditProfile);
 });
 buttonAddPicture.addEventListener('click', () => {
   setDefaultValuesInEditPicture();
-  clearInputError(pictureFormEdit, 'pop-up__text_invalid');
+  clearInputError(pictureFormEdit);
   openPopup(popupEditPicture);
 });
 avatarInfo.addEventListener('click', () => {
   setDefaultValuesInAvatar();
-  clearInputError(avatarForm, 'pop-up__text_invalid');
+  clearInputError(avatarForm);
   openPopup(popupUpdateAvatar);
 });
 popupEditForm.addEventListener('submit', saveProfile);
