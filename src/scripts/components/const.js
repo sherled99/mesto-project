@@ -34,3 +34,10 @@ export const validationConfig = {
     inactiveButtonClass: 'pop-up__button_save_type-inactive',
     errorClass: 'pop-up__text-error'
   }
+export const connection = {
+  baseUrl: "https://nomoreparties.co/v1/plus-cohort-18/",
+  headers: {
+    authorization: "95e1c598-7d7b-4945-aa63-eed177f7d6d7",
+    "Content-Type": "application/json",
+  }
+}

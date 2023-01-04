@@ -1,8 +1,10 @@
-import { cardList, template, picture, popupDeletePicture } from "./const.js";
+import { cardList, template, picture, popupDeletePicture, connection } from "./const.js";
 import { openPopup, closePopup } from "./modal.js";
 import { setDefaultValuesInCard, userId } from "../../pages/index.js";
-import { removeCard as removeCardInDb, updateLike as updateLikeInDb, addCard as addCardInDb } from "./api.js";
+import Api from "./Api.js"
 import { renderDeleting } from "./utils.js";
+
+const api = new Api({connection});
 
 function openRemoveCard(evt) {
   openPopup(popupDeletePicture);
@@ -12,7 +14,7 @@ function openRemoveCard(evt) {
 }
 
 function updateLike(method, like) {
-  updateLikeInDb(method, like.id)
+  api.updateLike(method, like.id)
     .then((res) => {
       like.textContent = res.likes.length;
     })
@@ -20,7 +22,7 @@ function updateLike(method, like) {
 }
 
 export function addCard(card) {
-  return addCardInDb(card)
+  return api.addCard(card)
     .then((res) =>
       cardList.prepend(
         createCard(
@@ -40,7 +42,7 @@ function removeCard(currentEvt) {
   currentEvt.preventDefault();
   const btn = currentEvt.target.querySelector(".pop-up__button-save");
   renderDeleting(btn, true);
-  return removeCardInDb(popupDeletePicture.id)
+  return api.removeCard(popupDeletePicture.id)
     .then(() => {
       popupDeletePicture.card.remove();
       closePopup(popupDeletePicture);

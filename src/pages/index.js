@@ -1,14 +1,16 @@
 import './index.css';
 import {popupEditProfile, nameEditButton, popupEditForm, buttonAddPicture, nameForm, hobbyForm, nameInfo, hobbyInfo, avatarInfo, avatarForm, popupUpdateAvatar,popupEditPicture, pictureFormEdit, nameProfile,
-    descProfile, namePicEdit, descPicEdit, picName, descName, pictureFormEditName, pictureFormEditDesc, cardList, formUrl, validationConfig} from '../scripts/components/const.js';
+    descProfile, namePicEdit, descPicEdit, picName, descName, pictureFormEditName, pictureFormEditDesc, cardList, formUrl, validationConfig, connection} from '../scripts/components/const.js';
 import {enableValidation} from '../scripts/components/validate.js'
 import {addCard} from '../scripts/components/card.js'
 import {closePopup, openPopup} from '../scripts/components/modal.js'
-import {getCards as getCardsInDb, getProfile as getProfileInDb, saveProfile as saveProfileInDb, updateAvatar as updateAvatarInDb} from '../scripts/components/api.js';
+import Api from "../scripts/components/Api.js"
 import {createCard} from '../scripts/components/card.js';
 import {renderLoading} from '../scripts/components/utils.js';
 import {clearInputError} from '../scripts/components/validate.js';
 export let userId;
+
+const api = new Api({connection});
 
 function setDefaultValuesInEditPicture(){
   namePicEdit.value = "";
@@ -31,14 +33,14 @@ export function setDefaultValuesInCard(name, desc){
 }
 
 function getProfile(){
-  getProfileInDb()
+  api.getProfile()
   .then((res) => updateProfile(res))
   .then(() => setStandartCards())
   .catch((err) => console.log(err));
 }
 
 function setStandartCards(){
-  return getCardsInDb()
+  return api.getCards()
   .then((cards) => {
     cards.forEach((card) => {
       cardList.append(createCard(card.owner._id, card._id, card.name, card.link, card.likes, card.likes.some(x => x._id === card.owner._id)));
@@ -58,7 +60,7 @@ function saveProfile (evt) {
   evt.preventDefault();
   const btn = evt.target.querySelector('.pop-up__button-save');
   renderLoading(btn, true);
-  saveProfileInDb(nameForm.value, hobbyForm.value)
+  api.saveProfile(nameForm.value, hobbyForm.value)
   .then((res) => {
     updateProfile(res);
     closePopup(popupEditProfile);
@@ -86,7 +88,7 @@ function updateAvatar(evt){
   evt.preventDefault();
   const btn = evt.target.querySelector('.pop-up__button-save');
   renderLoading(btn, true);
-  updateAvatarInDb(formUrl.value)
+  api.updateAvatar(formUrl.value)
   .then((res) => {
     avatarInfo.src = res.avatar;
     closePopup(popupUpdateAvatar);
