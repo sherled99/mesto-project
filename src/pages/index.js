@@ -1,16 +1,16 @@
 import './index.css';
 import {popupEditProfile, nameEditButton, popupEditForm, buttonAddPicture, nameForm, hobbyForm, nameInfo, hobbyInfo, avatarInfo, avatarForm, popupUpdateAvatar,popupEditPicture, pictureFormEdit, nameProfile,
     descProfile, namePicEdit, descPicEdit, picName, descName, pictureFormEditName, pictureFormEditDesc, cardList, formUrl, validationConfig, connection} from '../scripts/components/const.js';
-import {enableValidation} from '../scripts/components/validate.js'
 import {addCard} from '../scripts/components/card.js'
 import {closePopup, openPopup} from '../scripts/components/modal.js'
+import FormValidator from '../scripts/components/FormValidator.js'
 import Api from "../scripts/components/Api.js"
 import {createCard} from '../scripts/components/card.js';
 import {renderLoading} from '../scripts/components/utils.js';
-import {clearInputError} from '../scripts/components/validate.js';
 export let userId;
 
 const api = new Api({connection});
+const formValidator = new FormValidator({settings: validationConfig})
 
 function setDefaultValuesInEditPicture(){
   namePicEdit.value = "";
@@ -99,23 +99,23 @@ function updateAvatar(evt){
   .finally(() => renderLoading(btn, false));
 }
 
-enableValidation(validationConfig);
+formValidator.enableValidation();
 getProfile();
 
 
 nameEditButton.addEventListener('click', () => {
   setDefaultValuesInProfile();
-  clearInputError(popupEditForm);
+  formValidator.clearInputError(popupEditForm);
   openPopup(popupEditProfile);
 });
 buttonAddPicture.addEventListener('click', () => {
   setDefaultValuesInEditPicture();
-  clearInputError(pictureFormEdit);
+  formValidator.clearInputError(pictureFormEdit);
   openPopup(popupEditPicture);
 });
 avatarInfo.addEventListener('click', () => {
   setDefaultValuesInAvatar();
-  clearInputError(avatarForm);
+  formValidator.clearInputError(avatarForm);
   openPopup(popupUpdateAvatar);
 });
 popupEditForm.addEventListener('submit', saveProfile);
