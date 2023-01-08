@@ -1,36 +1,47 @@
 import './index.css';
-import {popupEditProfile, nameEditButton, popupEditForm, buttonAddPicture, nameForm, hobbyForm, nameInfo, hobbyInfo, avatarInfo, avatarForm, popupUpdateAvatar,popupEditPicture, pictureFormEdit, nameProfile,
-    descProfile, namePicEdit, descPicEdit, picName, descName, pictureFormEditName, pictureFormEditDesc, cardList, formUrl, validationConfig, connection} from '../scripts/components/const.js';
-import {addCard} from '../scripts/components/card.js'
-import {closePopup, openPopup} from '../scripts/components/modal.js'
+import {nameEditButton, popupEditForm, buttonAddPicture,nameInfo, hobbyInfo, avatarInfo, avatarForm, pictureFormEdit, cardList, validationConfig, connection} from '../scripts/components/const.js';
 import FormValidator from '../scripts/components/FormValidator.js'
 import Api from "../scripts/components/Api.js"
-import {createCard} from '../scripts/components/card.js';
+import Card from '../scripts/components/Card.js';
 import {renderLoading} from '../scripts/components/utils.js';
+import PopupWithImage from '../scripts/components/PopupWithImage.js'
+import PopupWithForm from '../scripts/components/PopupWithForm.js'
+import PopupWithoutForm from '../scripts/components/PopupWithoutForm';
 export let userId;
 
 const api = new Api({connection});
 const formValidator = new FormValidator({settings: validationConfig})
+const popupProfile = new PopupWithForm(
+  {
+    data: {selector:'#pop-up-edit-profile',
+          name: '#name',
+          description: "#description"},
+    submit: (evt) => {
+      const {name, description} = popupProfile.getInputValues();
+      saveProfile(evt, name, description);
+    }
+  });
 
-function setDefaultValuesInEditPicture(){
-  namePicEdit.value = "";
-  descPicEdit.value = "";
-}
+const popupNewPicture = new PopupWithForm(
+  {
+    data: {selector:'#pop-up-edit-picture',
+          name: '#name',
+          description: "#description"},
+    submit: (evt) => {
+      const {name, description} = popupNewPicture.getInputValues();
+      savePicture(evt, name, description);
+    }
+  });
 
-function setDefaultValuesInProfile(){
-  nameProfile.value = nameInfo.textContent;
-  descProfile.value = hobbyInfo.textContent;
-}
-
-function setDefaultValuesInAvatar(){
-  formUrl.value = "";
-}
-
-export function setDefaultValuesInCard(name, desc){
-  picName.src = name;
-  picName.alt = desc;
-  descName.textContent = desc;
-}
+const popupAvatar = new PopupWithForm(
+  {
+    data: {selector:'#pop-up-edit-avatar',
+          name: '#url'},
+    submit: (evt) => {
+      const {name} = popupAvatar.getInputValues();
+      updateAvatar(evt, name);
+    }
+  });
 
 function getProfile(){
   api.getProfile()
@@ -42,8 +53,18 @@ function getProfile(){
 function setStandartCards(){
   return api.getCards()
   .then((cards) => {
-    cards.forEach((card) => {
-      cardList.append(createCard(card.owner._id, card._id, card.name, card.link, card.likes, card.likes.some(x => x._id === card.owner._id)));
+    cards.forEach((res) => {
+      const card = new Card({data: res, handleClick: (photo) => {
+        photo.addEventListener('click', () => {
+          const popupWithImage = new PopupWithImage(`.picture`, '#name', '#description');
+          popupWithImage.open(res.link, res.name);
+        });
+      }, openRemoveCard: (evt) => {
+        const popupWithoutForm = new PopupWithoutForm('#pop-up-delete-picture', '#pop-up-delete-picture');
+        popupWithoutForm.open(evt);
+      }}, '.table__card');
+      const cardElement = card.createCard();
+      cardList.append(cardElement);
     });
   })
   .catch((err) => console.log(err));
@@ -56,43 +77,44 @@ function updateProfile(profile){
   userId = profile._id;
 }
   
-function saveProfile (evt) {
+function saveProfile (evt, name, description) {
   evt.preventDefault();
   const btn = evt.target.querySelector('.pop-up__button-save');
   renderLoading(btn, true);
-  api.saveProfile(nameForm.value, hobbyForm.value)
+  api.saveProfile(name, description)
   .then((res) => {
     updateProfile(res);
-    closePopup(popupEditProfile);
+    popupProfile.close(nameInfo.textContent, hobbyInfo.textContent);
   })
   .catch((err) => console.log(err))
   .finally(() => renderLoading(btn, false));
 }
 
-function savePicture(evt){
+function savePicture(evt, name, description){
   evt.preventDefault();
   const btn = evt.target.querySelector('.pop-up__button-save');
   renderLoading(btn, true);
-  addCard({
-    name: pictureFormEditName.value,
-    link: pictureFormEditDesc.value
+  const card = new Card("", ".template-card");
+  card.addCard({
+    name: name,
+    link: description
   })
   .then(() => {
-    closePopup(popupEditPicture);
+    popupNewPicture.close("", "");
   })
   .catch((err) => console.log(err))
   .finally(() => renderLoading(btn, false));
 }
 
-function updateAvatar(evt){
+
+function updateAvatar(evt, name){
   evt.preventDefault();
   const btn = evt.target.querySelector('.pop-up__button-save');
   renderLoading(btn, true);
-  api.updateAvatar(formUrl.value)
+  api.updateAvatar(name)
   .then((res) => {
     avatarInfo.src = res.avatar;
-    closePopup(popupUpdateAvatar);
-    setDefaultValuesInAvatar();
+    popupAvatar.close();
     renderLoading(btn, false);
   })
   .catch((err) => console.log(err))
@@ -104,20 +126,17 @@ getProfile();
 
 
 nameEditButton.addEventListener('click', () => {
-  setDefaultValuesInProfile();
+  popupProfile.clearValues(nameInfo.textContent, hobbyInfo.textContent);
   formValidator.clearInputError(popupEditForm);
-  openPopup(popupEditProfile);
+  popupProfile.open();
 });
 buttonAddPicture.addEventListener('click', () => {
-  setDefaultValuesInEditPicture();
+  popupNewPicture.clearValues("", "");
   formValidator.clearInputError(pictureFormEdit);
-  openPopup(popupEditPicture);
+  popupNewPicture.open();
 });
 avatarInfo.addEventListener('click', () => {
-  setDefaultValuesInAvatar();
+  popupAvatar.clearValues("");
   formValidator.clearInputError(avatarForm);
-  openPopup(popupUpdateAvatar);
+  popupAvatar.open();
 });
-popupEditForm.addEventListener('submit', saveProfile);
-pictureFormEdit.addEventListener('submit', savePicture);
-avatarForm.addEventListener('submit', updateAvatar);

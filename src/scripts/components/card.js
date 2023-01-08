@@ -1,87 +1,88 @@
-import { cardList, template, picture, popupDeletePicture, connection } from "./const.js";
-import { openPopup, closePopup } from "./modal.js";
-import { setDefaultValuesInCard, userId } from "../../pages/index.js";
+import { cardList, template, connection } from "./const.js";
+import {userId } from "../../pages/index.js";
 import Api from "./Api.js"
-import { renderDeleting } from "./utils.js";
-
 const api = new Api({connection});
 
-function openRemoveCard(evt) {
-  openPopup(popupDeletePicture);
-  popupDeletePicture.id = evt.target.parentElement.id;
-  popupDeletePicture.card = evt.target.closest(".table__card");
-  popupDeletePicture.addEventListener("submit", removeCard);
-}
-
-function updateLike(method, like) {
-  api.updateLike(method, like.id)
-    .then((res) => {
-      like.textContent = res.likes.length;
-    })
-    .catch((err) => console.log(err));
-}
-
-export function addCard(card) {
-  return api.addCard(card)
-    .then((res) =>
-      cardList.prepend(
-        createCard(
-          res.owner._id,
-          res._id,
-          res.name,
-          res.link,
-          res.likes,
-          res.likes.some((x) => x._id === res.owner._id)
-        )
-      )
-    )
-    .catch((err) => console.log(err));
-}
-
-function removeCard(currentEvt) {
-  currentEvt.preventDefault();
-  const btn = currentEvt.target.querySelector(".pop-up__button-save");
-  renderDeleting(btn, true);
-  return api.removeCard(popupDeletePicture.id)
-    .then(() => {
-      popupDeletePicture.card.remove();
-      closePopup(popupDeletePicture);
-      popupDeletePicture.removeEventListener("submit", removeCard);
-    })
-    .catch((err) => console.log(err))
-    .finally(() => renderDeleting(btn, false));
-}
-
-function setLike(evt) {
-  const like = evt.target.parentElement.querySelector(".table__like");
-  if (!evt.target.classList.contains("table__button-like_active")) {
-    updateLike("PUT", like);
-  } else {
-    updateLike("DELETE", like);
+export default class Card{
+  constructor({data, handleClick, openRemoveCard}, selector){
+    if (data){
+      this._ownerId = data.owner._id;
+      this.id = data._id;
+      this._link = data.link;
+      this._name = data.name;
+      this._likes = data.likes;
+    }
+    
+    this._openRemoveCard = openRemoveCard;
+    this._selector = selector;
+    this._handleClick = handleClick;
   }
-  evt.target.classList.toggle("table__button-like_active");
-}
 
-export function createCard(ownerId, id, name, link, likes, isLike) {
-  const cardElement = template.querySelector(".table__card").cloneNode(true);
-  cardElement.id = id;
-  const photo = cardElement.querySelector(".table__photo");
-  const like = cardElement.querySelector(".table__like");
-  photo.src = link;
-  photo.alt = name;
-  like.textContent = likes.length;
-  like.id = id;
-  cardElement.querySelector(".table__name").textContent = name;
-  const likeButton = cardElement.querySelector(".table__button-like");
-  if (isLike) likeButton.classList.add("table__button-like_active");
-  likeButton.addEventListener("click", setLike);
-  const btnDelete = cardElement.querySelector(".table__button-remove");
-  btnDelete.addEventListener("click", openRemoveCard);
-  if (userId === ownerId)
-    btnDelete.classList.add("table__button-remove_active");
-  photo.addEventListener("click", () => {
-    openPopup(picture);
-    setDefaultValuesInCard(link, name);
-  });
-  return cardElement;
+  createCard = () => {
+    this.cardElement = template.querySelector(this._selector).cloneNode(true);
+    this.cardElement.id = this.id;
+    this.cardElement.classList.add(`card${this.id}`);
+    this.cardElement.querySelector(".table__name").textContent = this._name;
+    this._createCardLike();
+    this._createCardValues();
+    this._createCardDelete();
+
+    return this.cardElement;
+  }
+
+  addCard = (card) => {
+    return api.addCard(card)
+      .then((res) => {
+        this._ownerId = res.owner._id;
+        this.id = res._id;
+        this._link = res.link;
+        this._name = res.name;
+        this._likes = res.likes;
+        cardList.prepend(this.createCard())
+        }
+      )
+      .catch((err) => console.log(err));
+  }
+
+  _createCardValues = () => {
+    const photo = this.cardElement.querySelector(".table__photo");
+    photo.src = this._link;
+    photo.alt = this._name;
+    this._handleClick(photo);
+  }
+
+  _createCardLike = () => {
+    const like = this.cardElement.querySelector(".table__like");
+    like.id = this.id;
+    like.textContent = this._likes.length;
+    const likeButton = this.cardElement.querySelector(".table__button-like");
+    if (this._likes.some(x => x._id === this._ownerId)) likeButton.classList.add("table__button-like_active");
+    likeButton.addEventListener("click", this._setLike);
+  }
+
+  _setLike = (evt) => {
+    const like = evt.target.parentElement.querySelector(".table__like");
+    if (!evt.target.classList.contains("table__button-like_active")) {
+      this._updateLike("PUT", like);
+    } else {
+      this._updateLike("DELETE", like);
+    }
+    evt.target.classList.toggle("table__button-like_active");
+  }
+
+  _updateLike = (method, like) => {
+    api.updateLike(method, like.id)
+      .then((res) => {
+        like.textContent = res.likes.length;
+      })
+      .catch((err) => console.log(err));
+  }
+
+  _createCardDelete = () => {
+    const btnDelete = this.cardElement.querySelector(".table__button-remove");
+    btnDelete.addEventListener("click", this._openRemoveCard);
+    if (userId === this._ownerId)
+      btnDelete.classList.add("table__button-remove_active");
+  }
+
 }
