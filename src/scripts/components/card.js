@@ -1,16 +1,17 @@
-import { cardList, template, connection } from "./const.js";
-import {userId } from "../../pages/index.js";
+import {connection } from "./const.js";
 import Api from "./Api.js"
 const api = new Api({connection});
 
 export default class Card{
-  constructor({data, handleClick, openRemoveCard}, selector){
+  constructor({data, handleClick, openRemoveCard, addCard}, selector, userId){
     if (data){
       this._ownerId = data.owner._id;
       this.id = data._id;
       this._link = data.link;
       this._name = data.name;
       this._likes = data.likes;
+      this._userId = userId;
+      this._addCard = addCard;
     }
     
     this._openRemoveCard = openRemoveCard;
@@ -19,6 +20,7 @@ export default class Card{
   }
 
   createCard = () => {
+    const template = document.querySelector("#template-card").content
     this.cardElement = template.querySelector(this._selector).cloneNode(true);
     this.cardElement.id = this.id;
     this.cardElement.classList.add(`card${this.id}`);
@@ -28,20 +30,6 @@ export default class Card{
     this._createCardDelete();
 
     return this.cardElement;
-  }
-
-  addCard = (card) => {
-    return api.addCard(card)
-      .then((res) => {
-        this._ownerId = res.owner._id;
-        this.id = res._id;
-        this._link = res.link;
-        this._name = res.name;
-        this._likes = res.likes;
-        cardList.prepend(this.createCard())
-        }
-      )
-      .catch((err) => console.log(err));
   }
 
   _createCardValues = () => {
@@ -81,7 +69,7 @@ export default class Card{
   _createCardDelete = () => {
     const btnDelete = this.cardElement.querySelector(".table__button-remove");
     btnDelete.addEventListener("click", this._openRemoveCard);
-    if (userId === this._ownerId)
+    if (this._userId === this._ownerId)
       btnDelete.classList.add("table__button-remove_active");
   }
 

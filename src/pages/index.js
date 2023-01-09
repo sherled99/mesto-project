@@ -3,13 +3,29 @@ import {nameEditButton, popupEditForm, buttonAddPicture,nameInfo, hobbyInfo, ava
 import FormValidator from '../scripts/components/FormValidator.js'
 import Api from "../scripts/components/Api.js"
 import Card from '../scripts/components/Card.js';
-import {renderLoading} from '../scripts/components/utils.js';
+import Render from '../scripts/components/Render.js';
 import PopupWithImage from '../scripts/components/PopupWithImage.js'
 import PopupWithForm from '../scripts/components/PopupWithForm.js'
 import PopupWithoutForm from '../scripts/components/PopupWithoutForm';
-export let userId;
+import UserInfo from '../scripts/components/UserInfo';
 
+const userInfo = new UserInfo(
+  {
+    data: {
+      selectorPorfile: '.profile',
+      selectorName: '.profile__name',
+      selectorStatus: '.profile__status',
+      selectorAvatar: '.profile__avatar'},
+    getProfile: () => {
+      return api.getProfile();
+    },
+    setStandartCards: (userId) => {
+      setStandartCards(userId);
+    }
+  }
+);
 const api = new Api({connection});
+const render = new Render();
 const formValidator = new FormValidator({settings: validationConfig})
 const popupProfile = new PopupWithForm(
   {
@@ -43,14 +59,7 @@ const popupAvatar = new PopupWithForm(
     }
   });
 
-function getProfile(){
-  api.getProfile()
-  .then((res) => updateProfile(res))
-  .then(() => setStandartCards())
-  .catch((err) => console.log(err));
-}
-
-function setStandartCards(){
+function setStandartCards(userId){
   return api.getCards()
   .then((cards) => {
     cards.forEach((res) => {
@@ -60,70 +69,75 @@ function setStandartCards(){
           popupWithImage.open(res.link, res.name);
         });
       }, openRemoveCard: (evt) => {
-        const popupWithoutForm = new PopupWithoutForm('#pop-up-delete-picture', '#pop-up-delete-picture');
+        const popupWithoutForm = new PopupWithoutForm({renderDelete: (btn, status) => {
+          render.renderDeleting(btn, status)
+        }}, '#pop-up-delete-picture', '#pop-up-delete-picture');
         popupWithoutForm.open(evt);
-      }}, '.table__card');
+      }}, '.table__card', userId);
       const cardElement = card.createCard();
       cardList.append(cardElement);
     });
   })
   .catch((err) => console.log(err));
 }
-
-function updateProfile(profile){
-  nameInfo.textContent = profile.name;
-  hobbyInfo.textContent = profile.about;
-  avatarInfo.src = profile.avatar;
-  userId = profile._id;
-}
   
 function saveProfile (evt, name, description) {
   evt.preventDefault();
   const btn = evt.target.querySelector('.pop-up__button-save');
-  renderLoading(btn, true);
+  render.renderLoading(btn, true);
   api.saveProfile(name, description)
   .then((res) => {
     updateProfile(res);
     popupProfile.close(nameInfo.textContent, hobbyInfo.textContent);
   })
   .catch((err) => console.log(err))
-  .finally(() => renderLoading(btn, false));
+  .finally(() => render.renderLoading(btn, false));
 }
 
 function savePicture(evt, name, description){
   evt.preventDefault();
   const btn = evt.target.querySelector('.pop-up__button-save');
-  renderLoading(btn, true);
-  const card = new Card("", ".template-card");
-  card.addCard({
+  render.renderLoading(btn, true);
+  api.addCard({
     name: name,
     link: description
+  })
+  .then((res) => {
+    const card = new Card({data: res, handleClick: (photo) => {
+      photo.addEventListener('click', () => {
+        const popupWithImage = new PopupWithImage(`.picture`, '#name', '#description');
+        popupWithImage.open(res.link, res.name);
+      });
+    }, openRemoveCard: (evt) => {
+      const popupWithoutForm = new PopupWithoutForm({renderDelete: (btn, status) => {
+        render.renderDeleting(btn, status)
+      }}, '#pop-up-delete-picture', '#pop-up-delete-picture');
+      popupWithoutForm.open(evt);
+    }}, '.table__card', res.owner._id);
+    const cardElement = card.createCard();
+    cardList.prepend(cardElement);
   })
   .then(() => {
     popupNewPicture.close("", "");
   })
   .catch((err) => console.log(err))
-  .finally(() => renderLoading(btn, false));
+  .finally(() => render.renderLoading(btn, false));
 }
 
 
 function updateAvatar(evt, name){
   evt.preventDefault();
   const btn = evt.target.querySelector('.pop-up__button-save');
-  renderLoading(btn, true);
+  render.renderLoading(btn, true);
   api.updateAvatar(name)
   .then((res) => {
     avatarInfo.src = res.avatar;
     popupAvatar.close();
-    renderLoading(btn, false);
+    render.renderLoading(btn, false);
   })
   .catch((err) => console.log(err))
-  .finally(() => renderLoading(btn, false));
+  .finally(() => render.renderLoading(btn, false));
 }
-
-formValidator.enableValidation();
-getProfile();
-
 
 nameEditButton.addEventListener('click', () => {
   popupProfile.clearValues(nameInfo.textContent, hobbyInfo.textContent);
@@ -140,3 +154,5 @@ avatarInfo.addEventListener('click', () => {
   formValidator.clearInputError(avatarForm);
   popupAvatar.open();
 });
+formValidator.enableValidation();
+userInfo.getUserInfo();

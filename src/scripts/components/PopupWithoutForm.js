@@ -1,15 +1,16 @@
 import Popup from './Popup.js';
 import Api from "./Api.js"
 import {connection} from './const.js';
-import { renderDeleting } from "./utils.js";
 
 const api = new Api({connection});
 
 export default class PopupWithoutForm extends Popup{
-    constructor(selector, selectorPicture){
+    constructor({renderDelete}, selector, selectorPicture){
         super(selector);
         this._popup = document.querySelector(selector);
         this._selectorPicture = selectorPicture;
+        this._renderDelete = renderDelete;
+        //this._deleteCard = deleteCard;
     }
 
     open = (evt) => {
@@ -27,7 +28,7 @@ export default class PopupWithoutForm extends Popup{
     _removeCard = (currentEvt) => {
         currentEvt.preventDefault();
         const btn = currentEvt.target.querySelector(".pop-up__button-save");
-        renderDeleting(btn, true);
+        this._renderDelete(btn, true);
         return api.removeCard(this._popupDeletePicture.id)
           .then(() => {
             this._popupDeletePicture.card.remove();
@@ -35,6 +36,6 @@ export default class PopupWithoutForm extends Popup{
             this._popupDeletePicture.removeEventListener("submit", this._removeCard);
           })
           .catch((err) => console.log(err))
-          .finally(() => renderDeleting(btn, false));
+          .finally(() => this._renderDelete(btn, false));
       }
 }
