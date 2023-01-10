@@ -8,6 +8,10 @@ import PopupWithImage from '../scripts/components/PopupWithImage.js'
 import PopupWithForm from '../scripts/components/PopupWithForm.js'
 import PopupWithoutForm from '../scripts/components/PopupWithoutForm';
 import UserInfo from '../scripts/components/UserInfo';
+import Section from '../scripts/components/Section';
+
+
+const section = new Section('.table');
 
 const userInfo = new UserInfo(
   {
@@ -24,6 +28,9 @@ const userInfo = new UserInfo(
     }
   }
 );
+
+
+
 const api = new Api({connection});
 const render = new Render();
 const formValidator = new FormValidator({settings: validationConfig})
@@ -71,11 +78,19 @@ function setStandartCards(userId){
       }, openRemoveCard: (evt) => {
         const popupWithoutForm = new PopupWithoutForm({renderDelete: (btn, status) => {
           render.renderDeleting(btn, status)
-        }}, '#pop-up-delete-picture', '#pop-up-delete-picture');
+        }, deleteCard: (id) => {
+          return api.removeCard(id);
+        }}, '.pop-up-delete-picture');
         popupWithoutForm.open(evt);
+      }, updateLike: (method, like) => {
+        api.updateLike(method, like.id)
+        .then((res) => {
+          like.textContent = res.likes.length;
+        })
+        .catch((err) => console.log(err));
       }}, '.table__card', userId);
       const cardElement = card.createCard();
-      cardList.append(cardElement);
+      section.addItem(cardElement);
     });
   })
   .catch((err) => console.log(err));
@@ -87,7 +102,7 @@ function saveProfile (evt, name, description) {
   render.renderLoading(btn, true);
   api.saveProfile(name, description)
   .then((res) => {
-    updateProfile(res);
+    userInfo.setUserInfo(res);
     popupProfile.close(nameInfo.textContent, hobbyInfo.textContent);
   })
   .catch((err) => console.log(err))
@@ -111,8 +126,22 @@ function savePicture(evt, name, description){
     }, openRemoveCard: (evt) => {
       const popupWithoutForm = new PopupWithoutForm({renderDelete: (btn, status) => {
         render.renderDeleting(btn, status)
-      }}, '#pop-up-delete-picture', '#pop-up-delete-picture');
+      }, deleteCard: (id) => {
+        return api.removeCard(id);
+      }, updateLike: (method, like) => {
+        api.updateLike(method, like.id)
+        .then((res) => {
+          like.textContent = res.likes.length;
+        })
+        .catch((err) => console.log(err));
+      }}, '.pop-up-delete-picture');
       popupWithoutForm.open(evt);
+    }, updateLike: (method, like) => {
+      api.updateLike(method, like.id)
+      .then((res) => {
+        like.textContent = res.likes.length;
+      })
+      .catch((err) => console.log(err));
     }}, '.table__card', res.owner._id);
     const cardElement = card.createCard();
     cardList.prepend(cardElement);

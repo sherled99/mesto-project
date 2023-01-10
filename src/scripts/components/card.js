@@ -1,9 +1,5 @@
-import {connection } from "./const.js";
-import Api from "./Api.js"
-const api = new Api({connection});
-
 export default class Card{
-  constructor({data, handleClick, openRemoveCard, addCard}, selector, userId){
+  constructor({data, handleClick, openRemoveCard, updateLike}, selector, userId){
     if (data){
       this._ownerId = data.owner._id;
       this.id = data._id;
@@ -11,12 +7,12 @@ export default class Card{
       this._name = data.name;
       this._likes = data.likes;
       this._userId = userId;
-      this._addCard = addCard;
     }
     
     this._openRemoveCard = openRemoveCard;
     this._selector = selector;
     this._handleClick = handleClick;
+    this._updateLike = updateLike;
   }
 
   createCard = () => {
@@ -56,14 +52,6 @@ export default class Card{
       this._updateLike("DELETE", like);
     }
     evt.target.classList.toggle("table__button-like_active");
-  }
-
-  _updateLike = (method, like) => {
-    api.updateLike(method, like.id)
-      .then((res) => {
-        like.textContent = res.likes.length;
-      })
-      .catch((err) => console.log(err));
   }
 
   _createCardDelete = () => {
