@@ -1,5 +1,5 @@
 import './index.css';
-import {nameEditButton, popupEditForm, buttonAddPicture,nameInfo, hobbyInfo, avatarInfo, avatarForm, pictureFormEdit, cardList, validationConfig, connection} from '../scripts/components/const.js';
+import {nameEditButton, popupEditForm, buttonAddPicture,nameInfo, hobbyInfo, avatarInfo, avatarForm, pictureFormEdit, cardList, validationConfig, connection} from '../scripts/utils/const.js';
 import FormValidator from '../scripts/components/FormValidator.js'
 import Api from "../scripts/components/Api.js"
 import Card from '../scripts/components/Card.js';
