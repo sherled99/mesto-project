@@ -1,35 +1,47 @@
 import Popup from './Popup.js';
 
 export default class PopupWithForm extends Popup{
-    constructor({data, submit}){
-        super(data.selector);
+    constructor({data, submit}, selector){
+        super(selector);
         this._name = data.name;
-        this._description = data.description;
-        this._nameSelector = this._popup.querySelector(this._name);
-        this._descriptionSelector = this._popup.querySelector(this._description);
+        this._description = data.desc;
         this._submit = submit;
     }
 
-    getInputValues = () => {
-        const name = this._nameSelector ? this._nameSelector.value : "";
-        const description = this._descriptionSelector ? this._descriptionSelector.value : "";
+    _getInputValues = () => {
+        const name = this._popup.querySelector('#name') ? this._popup.querySelector('#name').value : null;
+        const description = this._popup.querySelector('#description') ? this._popup.querySelector('#description').value : null;
         return {name : name, description: description};
     }
 
-    clearValues = (name, description) => {
-        if (this._nameSelector) this._nameSelector.value = name;
-        if (this._descriptionSelector) this._descriptionSelector.value = description;
-        
+    _clearValues = () => {
+        this._popup.querySelector('#name') ? this._popup.querySelector('#name').value = this._name : null;
+        this._popup.querySelector('#description') ? this._popup.querySelector('#description').value = this._description : null;
     }
 
-    close = (name, description) => {
-        this.clearValues(name, description);
+    close = () => {
         this._popup.removeEventListener("submit", this._submit);
         super.close();
     }
 
+    open = () => {
+        this._clearValues();
+        super.open();
+    }
+
+    refreshValues = (name, description) => {
+        this._name = name;
+        this._description = description;
+    }
+    
+
     setEventListeners = () => {
-        this._popup.addEventListener('submit', this._submit);
+        const once = {
+            once : true
+        };
+        this._popup.addEventListener('submit', (evt) => {
+            this._submit(this._getInputValues(), evt);
+        }, once);
         super.setEventListeners();
     }
 }

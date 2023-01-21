@@ -47,11 +47,20 @@ export default class Card{
   _setLike = (evt) => {
     const like = evt.target.parentElement.querySelector(".table__like");
     if (!evt.target.classList.contains("table__button-like_active")) {
-      this._updateLike("PUT", like);
+      this._updateLike("PUT", like)
+        .then((res) => {
+          evt.target.classList.add("table__button-like_active");
+          like.textContent = res.likes.length;
+        })
+        .catch((err) => console.log(err));
     } else {
-      this._updateLike("DELETE", like);
+      this._updateLike("DELETE", like)
+        .then((res) => {
+          evt.target.classList.remove("table__button-like_active");
+          like.textContent = res.likes.length;
+        })
+        .catch((err) => console.log(err));;
     }
-    evt.target.classList.toggle("table__button-like_active");
   }
 
   _createCardDelete = () => {

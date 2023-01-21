@@ -35,7 +35,7 @@
                 <button class="popup__close pop-up__button-close" type="button" id="pop-up-edit-profile-close"></button>
                 <div class="pop-up__container">
                     <h2 class="pop-up__title">Редактировать профиль</h2>
-                    <form class='pop-up__form' name="edit-form" novalidate>
+                    <form class='pop-up__form' name="edit-form" id="edit-form-profile" novalidate>
                         <div class="pop-up__input-form">
                             <input class='pop-up__text' type='text' id="name" minlength="2" maxlength="40" pattern="^[А-яA-Za-z,\-\s]+$" data-error-message="Разрешены только латинские буквы, кириллические буквы, знаки дефиса и пробелы" required>
                             <span class="pop-up__text-error pop-up__text-name-error"></span>
@@ -75,8 +75,8 @@
                     <h2 class="pop-up__title">Обновить аватар</h2>
                     <form class='pop-up__form' name="edit-form-avatar" id="edit-form-avatar" novalidate>
                         <div class="pop-up__input-form">
-                            <input class='pop-up__text' placeholder="Введите ссылку" type='url' id="url" required>
-                            <span class="pop-up__text-error pop-up__text-url-error"></span>
+                            <input class='pop-up__text' placeholder="Введите ссылку" type='url' id="name" required>
+                            <span class="pop-up__text-error pop-up__text-name-error"></span>
                         </div>
                         <button class='pop-up__button-save' type='submit' disabled >Сохранить</button>
                     </form>
@@ -89,7 +89,7 @@
                 <div class="pop-up__container pop-up__container_delete-picture">
                     <h2 class="pop-up__title">Вы уверены?</h2>
                     <form class='pop-up__form' name="edit-form-delete-picture" id="edit-form-delete-picture" novalidate>
-                        <button class='pop-up__button-save' type='submit' disabled >Да</button>
+                        <button class='pop-up__button-save' type='submit' >Да</button>
                     </form>
                 </div>
             </section>

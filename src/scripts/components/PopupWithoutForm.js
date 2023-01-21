@@ -14,7 +14,12 @@ export default class PopupWithoutForm extends Popup{
     _openRemoveCard = (evt) => {
         this._popup.id = evt.target.parentElement.id;
         this._popup.card = evt.target.closest(".table__card");
+        
+    }
+
+    setEventListeners = () => {
         this._popup.addEventListener("submit", this._removeCard);
+        super.setEventListeners();
     }
 
     _removeCard = (currentEvt) => {
