@@ -37,11 +37,11 @@
                     <h2 class="pop-up__title">Редактировать профиль</h2>
                     <form class='pop-up__form' name="edit-form" id="edit-form-profile" novalidate>
                         <div class="pop-up__input-form">
-                            <input class='pop-up__text' type='text' id="name" minlength="2" maxlength="40" pattern="^[А-яA-Za-z,\-\s]+$" data-error-message="Разрешены только латинские буквы, кириллические буквы, знаки дефиса и пробелы" required>
+                            <input class='pop-up__text' type='text' v-model="text" id="name" minlength="2" maxlength="40" pattern="^[А-яA-Za-z,\-\s]+$" data-error-message="Разрешены только латинские буквы, кириллические буквы, знаки дефиса и пробелы" required>
                             <span class="pop-up__text-error pop-up__text-name-error"></span>
                         </div>
                         <div class="pop-up__input-form">
-                            <input class='pop-up__text' type='text' id="description" minlength="2" maxlength="200" pattern="^[А-яA-Za-z,\-\s]+$" data-error-message="Разрешены только латинские буквы, кириллические буквы, знаки дефиса и пробелы" required>
+                            <input class='pop-up__text' type='text' v-model="text" id="description" minlength="2" maxlength="200" pattern="^[А-яA-Za-z,\-\s]+$" data-error-message="Разрешены только латинские буквы, кириллические буквы, знаки дефиса и пробелы" required>
                             <span class="pop-up__text-error pop-up__text-description-error"></span>
                         </div>
                         <button class='pop-up__button-save' type='submit'>Сохранить</button>

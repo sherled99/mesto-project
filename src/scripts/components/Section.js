@@ -1,9 +1,9 @@
-export default class Section{
+export default class Section {
     constructor(containerSelector) {
         this._container = document.querySelector(containerSelector);
-      }
-    
-      addItem(element) {
+    }
+
+    addItem(element) {
         this._container.append(element);
-      }
+    }
 }
