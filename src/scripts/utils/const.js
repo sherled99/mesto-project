@@ -1,7 +1,5 @@
 export const nameEditButton = document.querySelector(".profile__button-edit");
-export const profileInfo = document.querySelector(".profile");
-export const avatarInfo = profileInfo.querySelector(".profile__avatar");
-export const cardList = document.querySelector(".table");
+export const avatarInfo = document.querySelector(".profile__avatar");
 export const buttonAddPicture = document.querySelector(".profile__button-add");
 export const validationConfig = {
     inputSelector: ".pop-up__text",

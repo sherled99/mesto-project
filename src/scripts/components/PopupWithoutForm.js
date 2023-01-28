@@ -10,8 +10,9 @@ export default class PopupWithoutForm extends Popup {
         table: ".table__card",
     };
 
-    open = (evt) => {
+    open = (evt, card) => {
         this._openRemoveCard(evt);
+        this.card = card;
         super.open();
     };
 

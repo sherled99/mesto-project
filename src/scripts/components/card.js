@@ -28,33 +28,38 @@ export default class Card {
         this.cardElement.classList.add(`card${this.id}`);
         this.cardElement.querySelector(".table__name").textContent = this._name;
         this._createCardLike();
-        this._createCardValues();
+        this._setValuesInCard();
         this._createCardDelete();
 
         return this.cardElement;
     };
 
+    setCountLike = (likes) => {
+        this._like.textContent = likes;
+        this._likeButton.classList.toggle("table__button-like_active");
+    }
+
     remove = () => {
         this.cardElement.remove();
     };
 
-    _createCardValues = () => {
+    _setValuesInCard = () => {
         const photo = this.cardElement.querySelector(".table__photo");
         photo.src = this._link;
         photo.alt = this._name;
-        this._handleClick(photo);
+        photo.addEventListener("click", this._handleClick);
     };
 
     _createCardLike = () => {
-        const like = this.cardElement.querySelector(".table__like");
-        like.id = this.id;
-        like.textContent = this._likes.length;
-        const likeButton = this.cardElement.querySelector(
+        this._like = this.cardElement.querySelector(".table__like");
+        this._like.id = this.id;
+        this._like.textContent = this._likes.length;
+        this._likeButton = this.cardElement.querySelector(
             ".table__button-like"
         );
         if (this._likes.some((x) => x._id === this._userId))
-            likeButton.classList.add("table__button-like_active");
-        likeButton.addEventListener("click", this._updateLike);
+            this._likeButton.classList.add("table__button-like_active");
+        this._likeButton.addEventListener("click", this._updateLike);
     };
 
     _createCardDelete = () => {
