@@ -59,8 +59,14 @@ export default class Card {
         );
         if (this._likes.some((x) => x._id === this._userId))
             this._likeButton.classList.add("table__button-like_active");
-        this._likeButton.addEventListener("click", this._updateLike);
+        this._likeButton.addEventListener("click", this._handleUpdateLike);
     };
+
+    _handleUpdateLike = () => {
+        const method = !this._likeButton.classList.contains("table__button-like_active") ? "PUT" : "DELETE";
+        const like = this._likeButton.parentElement.querySelector(".table__like");
+        this._updateLike(method, like.id);
+    }
 
     _createCardDelete = () => {
         const btnDelete = this.cardElement.querySelector(

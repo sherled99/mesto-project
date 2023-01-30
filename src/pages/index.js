@@ -38,10 +38,10 @@ const popupWithImage = new PopupWithImage(
 
 const popupWithoutForm = new PopupWithoutForm(
     {
-        deleteCard: (btn, popup) => {
+        deleteCard: (btn, card) => {
             render.renderDeleting(btn, true);
             return api
-                .removeCard(popup.id)
+                .removeCard(card.id)
                 .then(() => {
                     popupWithoutForm.card.remove();
                     popupWithoutForm.close();
@@ -84,14 +84,12 @@ const createCard = (res) => {
             handleClick: () => {
                 popupWithImage.open(res.link, res.name);
             },
-            openRemoveCard: (evt) => {
-                popupWithoutForm.open(evt, card);
+            openRemoveCard: () => {
+                popupWithoutForm.open(card);
             },
-            updateLike: (evt) => {
-                const method = !evt.target.classList.contains("table__button-like_active") ? "PUT" : "DELETE";
-                const like = evt.target.parentElement.querySelector(".table__like");
+            updateLike: (method, likeId) => {
                 return api
-                    .updateLike(method, like.id)
+                    .updateLike(method, likeId)
                     .then((res) => {
                         card.setCountLike(res.likes.length);
                   })
@@ -108,7 +106,7 @@ const createCard = (res) => {
 const saveProfile = (evt, values) => {
     const btn = evt.target.querySelector(".pop-up__button-save");
     render.renderLoading(btn, true);
-    api.saveProfile(values[0], values[1])
+    api.saveProfile(values.name, values.description)
         .then((res) => {
             popupProfile.close();
             userInfo.setUserInfo(res);
@@ -147,7 +145,7 @@ const popupAvatar = new PopupWithForm(
 const updateAvatar = (evt, values) => {
     const btn = evt.target.querySelector(".pop-up__button-save");
     render.renderLoading(btn, true);
-    api.updateAvatar(values[0])
+    api.updateAvatar(values.name)
         .then((res) => {
             userInfo.setUserInfo(res);
             popupAvatar.close();
@@ -161,8 +159,8 @@ const savePicture = (evt, values) => {
     const btn = evt.target.querySelector(".pop-up__button-save");
     render.renderLoading(btn, true);
     api.addCard({
-        name: values[0],
-        link: values[1],
+        name: values.name,
+        link: values.description,
     })
         .then((res) => {
             const card = createCard(res);
@@ -178,7 +176,7 @@ const savePicture = (evt, values) => {
 
 nameEditButton.addEventListener("click", () => {
     popupProfile.open();
-    popupProfile.setStandartValues([document.querySelector('.profile__name').textContent, document.querySelector('.profile__status').textContent]);
+    popupProfile.setStandartValues(userInfo.getUserInfo());
     porfileValidator.clearInputError();
 });
 buttonAddPicture.addEventListener("click", () => {
@@ -199,4 +197,5 @@ Promise.all([standartUserData, standartCards]).then((values) => {
     userInfo.setUserInfo(values[0]);
     section.items = values[1];
     section.renderItems();
-});
+})
+.catch((err) => console.log(err));

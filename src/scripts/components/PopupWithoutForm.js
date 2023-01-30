@@ -3,6 +3,7 @@ export default class PopupWithoutForm extends Popup {
     constructor({ deleteCard }, selector) {
         super(selector);
         this._deleteCard = deleteCard;
+        this._button = this._popup.querySelector(this._classSelector.btnSave);
     }
 
     _classSelector = {
@@ -10,15 +11,9 @@ export default class PopupWithoutForm extends Popup {
         table: ".table__card",
     };
 
-    open = (evt, card) => {
-        this._openRemoveCard(evt);
+    open = (card) => {
         this.card = card;
         super.open();
-    };
-
-    _openRemoveCard = (evt) => {
-        this._popup.id = evt.target.parentElement.id;
-        this._popup.card = evt.target.closest(this._classSelector.table);
     };
 
     setEventListeners = () => {
@@ -30,8 +25,8 @@ export default class PopupWithoutForm extends Popup {
         evt.preventDefault();
         this._popup.removeEventListener("submit", this._removeCard);
         return this._deleteCard(
-            evt.target.querySelector(this._classSelector.btnSave),
-            this._popup
+            this._button,
+            this.card
         );
     };
 }

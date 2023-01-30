@@ -11,12 +11,10 @@ export default class PopupWithForm extends Popup {
     }
 
     _getInputValues = () => {
-        let elements = [];
-        for (const item in this._collection) {
-            elements.push(
-                this._collection[item].value
-            );
-        }
+        let elements = {};
+        this._collection.forEach((element) => {
+            elements[element.id] = element.value;
+        });
         return elements;
     };
 
@@ -33,9 +31,9 @@ export default class PopupWithForm extends Popup {
     };
 
     setStandartValues = (data) => {
-        for (const item in this._collection) {
-            this._collection[item].value = data[item];
-        }
+        this._collection.forEach((element) => {
+            element.value = data[element.id];
+        });
     }
 
     open = () => {

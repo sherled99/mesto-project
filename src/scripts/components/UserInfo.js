@@ -13,7 +13,7 @@ export default class UserInfo {
     getUserInfo = () => {
         return {
             name: this._nameInfo.textContent,
-            desc: this._hobbyInfo.textContent,
+            description: this._hobbyInfo.textContent,
             avatar: this._avatarInfo.src,
         };
     };
