@@ -1,121 +1,201 @@
-import './index.css';
-import {popupEditProfile, nameEditButton, popupEditForm, buttonAddPicture, nameForm, hobbyForm, nameInfo, hobbyInfo, avatarInfo, avatarForm, popupUpdateAvatar,popupEditPicture, pictureFormEdit, nameProfile,
-    descProfile, namePicEdit, descPicEdit, picName, descName, pictureFormEditName, pictureFormEditDesc, cardList, formUrl, validationConfig} from '../scripts/components/const.js';
-import {enableValidation} from '../scripts/components/validate.js'
-import {addCard} from '../scripts/components/card.js'
-import {closePopup, openPopup} from '../scripts/components/modal.js'
-import {getCards as getCardsInDb, getProfile as getProfileInDb, saveProfile as saveProfileInDb, updateAvatar as updateAvatarInDb} from '../scripts/components/api.js';
-import {createCard} from '../scripts/components/card.js';
-import {renderLoading} from '../scripts/components/utils.js';
-import {clearInputError} from '../scripts/components/validate.js';
-export let userId;
+import "./index.css";
+import {
+    nameEditButton,
+    buttonAddPicture,
+    avatarInfo,
+    validationConfig,
+    connection,
+} from "../scripts/utils/const.js";
+import FormValidator from "../scripts/components/FormValidator.js";
+import Api from "../scripts/components/Api.js";
+import Card from "../scripts/components/Card.js";
+import Render from "../scripts/components/Render.js";
+import PopupWithImage from "../scripts/components/PopupWithImage.js";
+import PopupWithForm from "../scripts/components/PopupWithForm.js";
+import PopupWithoutForm from "../scripts/components/PopupWithoutForm";
+import UserInfo from "../scripts/components/UserInfo";
+import Section from "../scripts/components/Section";
 
-function setDefaultValuesInEditPicture(){
-  namePicEdit.value = "";
-  descPicEdit.value = "";
-}
+const render = new Render();
+const porfileValidator = new FormValidator(
+    { settings: validationConfig },
+    "#edit-form-profile"
+);
+const cardValidator = new FormValidator(
+    { settings: validationConfig },
+    "#edit-form-picture"
+);
+const avatarValidator = new FormValidator(
+    { settings: validationConfig },
+    "#edit-form-avatar"
+);
 
-function setDefaultValuesInProfile(){
-  nameProfile.value = nameInfo.textContent;
-  descProfile.value = hobbyInfo.textContent;
-}
+const popupWithImage = new PopupWithImage(
+    `.picture`,
+    "#name",
+    "#description"
+);
 
-function setDefaultValuesInAvatar(){
-  formUrl.value = "";
-}
+const popupWithoutForm = new PopupWithoutForm(
+    {
+        deleteCard: (btn, card) => {
+            render.renderDeleting(btn, true);
+            return api
+                .removeCard(card.id)
+                .then(() => {
+                    popupWithoutForm.card.remove();
+                    popupWithoutForm.close();
+                })
+                .catch((err) => console.log(err))
+                .finally(() => {
+                    render.renderDeleting(btn, false);
+                });
+        },
+    },
+    ".pop-up-delete-picture"
+);
 
-export function setDefaultValuesInCard(name, desc){
-  picName.src = name;
-  picName.alt = desc;
-  descName.textContent = desc;
-}
+const section = new Section({ 
+    renderer: (item) => {
+        const card = createCard(item);
+        const cardElement = card.createCard();
+        section.addItem(cardElement, true);
+    }},".table");
 
-function getProfile(){
-  getProfileInDb()
-  .then((res) => updateProfile(res))
-  .then(() => setStandartCards())
-  .catch((err) => console.log(err));
-}
+let userId;
 
-function setStandartCards(){
-  return getCardsInDb()
-  .then((cards) => {
-    cards.forEach((card) => {
-      cardList.append(createCard(card.owner._id, card._id, card.name, card.link, card.likes, card.likes.some(x => x._id === card.owner._id)));
-    });
-  })
-  .catch((err) => console.log(err));
-}
+const api = new Api({ connection });
+const standartUserData = api.getProfile();
+const standartCards = api.getCards();
 
-function updateProfile(profile){
-  nameInfo.textContent = profile.name;
-  hobbyInfo.textContent = profile.about;
-  avatarInfo.src = profile.avatar;
-  userId = profile._id;
-}
-  
-function saveProfile (evt) {
-  evt.preventDefault();
-  const btn = evt.target.querySelector('.pop-up__button-save');
-  renderLoading(btn, true);
-  saveProfileInDb(nameForm.value, hobbyForm.value)
-  .then((res) => {
-    updateProfile(res);
-    closePopup(popupEditProfile);
-  })
-  .catch((err) => console.log(err))
-  .finally(() => renderLoading(btn, false));
-}
-
-function savePicture(evt){
-  evt.preventDefault();
-  const btn = evt.target.querySelector('.pop-up__button-save');
-  renderLoading(btn, true);
-  addCard({
-    name: pictureFormEditName.value,
-    link: pictureFormEditDesc.value
-  })
-  .then(() => {
-    closePopup(popupEditPicture);
-  })
-  .catch((err) => console.log(err))
-  .finally(() => renderLoading(btn, false));
-}
-
-function updateAvatar(evt){
-  evt.preventDefault();
-  const btn = evt.target.querySelector('.pop-up__button-save');
-  renderLoading(btn, true);
-  updateAvatarInDb(formUrl.value)
-  .then((res) => {
-    avatarInfo.src = res.avatar;
-    closePopup(popupUpdateAvatar);
-    setDefaultValuesInAvatar();
-    renderLoading(btn, false);
-  })
-  .catch((err) => console.log(err))
-  .finally(() => renderLoading(btn, false));
-}
-
-enableValidation(validationConfig);
-getProfile();
-
-
-nameEditButton.addEventListener('click', () => {
-  setDefaultValuesInProfile();
-  clearInputError(popupEditForm);
-  openPopup(popupEditProfile);
+const userInfo = new UserInfo({
+    data: {
+        selectorPorfile: ".profile",
+        selectorName: ".profile__name",
+        selectorStatus: ".profile__status",
+        selectorAvatar: ".profile__avatar",
+    }
 });
-buttonAddPicture.addEventListener('click', () => {
-  setDefaultValuesInEditPicture();
-  clearInputError(pictureFormEdit);
-  openPopup(popupEditPicture);
+
+const createCard = (res) => {
+    const card = new Card(
+        {
+            data: res,
+            handleClick: () => {
+                popupWithImage.open(res.link, res.name);
+            },
+            openRemoveCard: () => {
+                popupWithoutForm.open(card);
+            },
+            updateLike: (method, likeId) => {
+                return api
+                    .updateLike(method, likeId)
+                    .then((res) => {
+                        card.setCountLike(res.likes.length);
+                  })
+                  .catch((err) => console.log(err));
+            },
+        },
+        ".table__card",
+        userId
+    );
+
+    return card;
+};
+
+const saveProfile = (evt, values) => {
+    const btn = evt.target.querySelector(".pop-up__button-save");
+    render.renderLoading(btn, true);
+    api.saveProfile(values.name, values.description)
+        .then((res) => {
+            popupProfile.close();
+            userInfo.setUserInfo(res);
+        })
+        .catch((err) => console.log(err))
+        .finally(() => render.renderLoading(btn, false));
+};
+
+const popupProfile = new PopupWithForm(
+    {
+        submit: (evt, values) => {
+            saveProfile(evt, values);
+        },
+    },
+    "#pop-up-edit-profile"
+);
+
+const popupNewPicture = new PopupWithForm(
+    {
+        submit: (evt, values) => {
+            savePicture(evt, values);
+        },
+    },
+    "#pop-up-edit-picture"
+);
+
+const popupAvatar = new PopupWithForm(
+    {
+        submit: (evt, values) => {
+            updateAvatar(evt, values);
+        },
+    },
+    "#pop-up-edit-avatar"
+);
+
+const updateAvatar = (evt, values) => {
+    const btn = evt.target.querySelector(".pop-up__button-save");
+    render.renderLoading(btn, true);
+    api.updateAvatar(values.name)
+        .then((res) => {
+            userInfo.setUserInfo(res);
+            popupAvatar.close();
+            render.renderLoading(btn, false);
+        })
+        .catch((err) => console.log(err))
+        .finally(() => render.renderLoading(btn, false));
+};
+
+const savePicture = (evt, values) => {
+    const btn = evt.target.querySelector(".pop-up__button-save");
+    render.renderLoading(btn, true);
+    api.addCard({
+        name: values.name,
+        link: values.description,
+    })
+        .then((res) => {
+            const card = createCard(res);
+            const cardElement = card.createCard();
+            section.addItem(cardElement, false);
+        })
+        .then(() => {
+            popupNewPicture.close("", "");
+        })
+        .catch((err) => console.log(err))
+        .finally(() => render.renderLoading(btn, false));
+};
+
+nameEditButton.addEventListener("click", () => {
+    popupProfile.open();
+    popupProfile.setStandartValues(userInfo.getUserInfo());
+    porfileValidator.clearInputError();
 });
-avatarInfo.addEventListener('click', () => {
-  setDefaultValuesInAvatar();
-  clearInputError(avatarForm);
-  openPopup(popupUpdateAvatar);
+buttonAddPicture.addEventListener("click", () => {
+    popupNewPicture.open();
+    cardValidator.clearInputError();
 });
-popupEditForm.addEventListener('submit', saveProfile);
-pictureFormEdit.addEventListener('submit', savePicture);
-avatarForm.addEventListener('submit', updateAvatar);
+avatarInfo.addEventListener("click", () => {
+    popupAvatar.open();
+    avatarValidator.clearInputError();
+});
+
+porfileValidator.enableValidation();
+avatarValidator.enableValidation();
+cardValidator.enableValidation();
+
+Promise.all([standartUserData, standartCards]).then((values) => {
+    userId = values[0]._id;
+    userInfo.setUserInfo(values[0]);
+    section.items = values[1];
+    section.renderItems();
+})
+.catch((err) => console.log(err));
